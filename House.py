@@ -128,4 +128,11 @@ class House:
         if 'MLS#' in paragraph:
             index = paragraph.index('MLS#')
             self.MLS = paragraph[index+5:len(paragraph)-1]
+            
+    def set_salesprice(self, container):  
+        pricecont = container.find('h3')
+        if pricecont is None:
+            return
+        
+        self.salesprice = pricecont.text
         
