@@ -53,8 +53,7 @@ def total_pages_results(url):
     return int(page_list[-2].text.strip())
 
 
-def save_house_links(pages, df_prev_links, name):
-    links_new = []
+def save_house_links(links, pages, df_prev):
     for page in pages:
         html_soup = soupify(page)
         if html_soup is None:
@@ -63,14 +62,12 @@ def save_house_links(pages, df_prev_links, name):
         link_soup = html_soup.find_all('li', attrs={'class' : 'xsCol12Landscape smlCol12 lrgCol8'})
         for item in link_soup:
             link = 'https://www.trulia.com' + item.find('a').attrs['href']
-            if entry_exists(link, df_prev_links, 0):
+            if entry_exists(link, df_prev, 'url'):
                 continue
             
-            links_new.append(link)
-        save_df(links_new, df_prev_links, name, False)
-    print(len(links_new), ' new links to scrape')
-    
-    
+            links.append(link)
+
+
 def add_house(house_data, new_house):
     house_data[uuid.uuid4().hex[:8]] = {'url' : new_house.url, 
                                        'address' : new_house.address,
