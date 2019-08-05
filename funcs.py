@@ -47,10 +47,8 @@ def soupify(url):
 
 def total_pages_results(url):
     html_soup = soupify(url)
-    container = html_soup.find('div', attrs={'class' : 'paginationContainer'})
-    page_list = container.find_all('a', attrs={'class' : 'pvl phm'})
-    
-    return int(page_list[-2].text.strip())
+    container = html_soup.find_all('li', attrs={'data-testid' : 'pagination-page-link'})
+    return int(container[-1].text.strip())
 
 
 def save_house_links(links, pages, df_prev):
@@ -59,7 +57,7 @@ def save_house_links(links, pages, df_prev):
         if html_soup is None:
             continue
 
-        link_soup = html_soup.find_all('li', attrs={'class' : 'xsCol12Landscape smlCol12 lrgCol8'})
+        link_soup = html_soup.find_all('div', attrs={'data-testid' : 'home-card-sale'})
         for item in link_soup:
             link = 'https://www.trulia.com' + item.find('a').attrs['href']
             if entry_exists(link, df_prev, 'url'):
