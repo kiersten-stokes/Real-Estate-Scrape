@@ -11,8 +11,8 @@ numpages = total_pages_results(base_url)
 print(numpages, ' pages of search results to scrape')
 
 pages = [base_url]
-for page in range(2, 3):
-    #for page in range(2, numpages+1):
+#for page in range(2, 3):
+for page in range(2, numpages+1):
     pages.append(base_url + str(page) + '_p/')
 
 
@@ -36,19 +36,16 @@ house_append = 0
 start_time = time.time()
 for url in links:
     
-    if house_new + house_append >= 40:
-        break
+    '''if house_new + house_append >= 40:
+        break'''
      
     html_soup = soupify(url)
-    if html_soup is None:
-        print('does this ever happen?')
-        continue
     
     container = html_soup.find('title')
     if container is not None and 'Access to this page has been denied' in container.text:
-        print('Access to page denied, skipping house and sleeping for 1 minute')
+        print('Access to page denied, sleeping for 30 minutes')
         links.append(url)
-        time.sleep(60)
+        time.sleep(1800)
         print('Resuming scrape')
         continue
     
